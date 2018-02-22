@@ -60,16 +60,16 @@ module IntListStack =
     type stack = int list
 
     (* Returns an empty stack *)
-    let empty () : stack = failwith "not implemented"
+    let empty () : stack = []
 
     (* Add an element to the top of the stack *)
-    let push (i : int) (s : stack) : stack = failwith "not implemented"
+    let push (i : int) (s : stack) : stack = i :: s
 
     (* Return the value of the topmost element on the stack *)
-    let top (s : stack) : int = failwith "not implemented"
+    let top (h::_ : stack) : int = h
 
     (* Return a modified stack with the topmost element removed *)
-    let pop (s : stack) : stack = failwith "not implemented"
+    let pop (_::t : stack) : stack = t
   end ;;
 
 (* Now let's use this implementation and consider some implications.
@@ -79,16 +79,18 @@ Exercise 3B: Write a function "small_stack" that takes a unit argument
 and uses the IntListStack implementation to create a new stack with
 the values "5" and then "1" pushed in that order.
 ......................................................................*)
-
+open IntListStack ;;
 let small_stack () : IntListStack.stack =
-  failwith "not implemented" ;;
+  empty ()
+  |> push 5
+  |> push 1 ;;
 
 (*......................................................................
 Exercise 3C: Now, use IntListStack methods to write an expression that
 defines last_el as the value of the topmost element from small_stack.
 ......................................................................*)
 
-let last_el = 0;;
+let last_el = top (small_stack ()) ;;
 
 (* Based on our requirements above, what should last_el contain?
 
@@ -128,7 +130,7 @@ manually?"
 Several reasons:
 
 First, as we've just done, it was entirely possible for us as a user
-of the module to completely change the internal representation. 
+of the module to completely change the internal representation.
 Imagine what would happen for a more complex module that allowed us to
 break an invariant! From Problem Set 3, what would break if a person
 could change a zero bignum to also set the negative flag? Or pass a
